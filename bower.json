@@ -12,6 +12,10 @@
     "libs",
     "demo",
     "src",
+    "CONTRIBUTING.md",
+    "Gruntfile.js",
+    "LICENSE-MIT",
+    "README.md",
     "tests"
   ]
 }
