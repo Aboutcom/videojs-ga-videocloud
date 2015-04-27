@@ -8,10 +8,13 @@
 
 videojs.plugin 'ga', (options = {}) ->
 
-  referrer = new URL(document.referrer)
-  if (self != top && window.location.host == 'preview-players.brightcove.net' && referrer.hostname = 'studio.brightcove.com')
-    videojs.log('Google analytics plugin will not track events in Video Cloud Studio')
-    return
+  try
+    referrer = new URL(document.referrer)
+    if (self != top && window.location.host == 'preview-players.brightcove.net' && referrer.hostname = 'studio.brightcove.com')
+      videojs.log('Google analytics plugin will not track events in Video Cloud Studio')
+      return
+  catch e
+    # Do nothing in case document.referrer is blank
 
   player = @
 
@@ -32,10 +35,10 @@ videojs.plugin 'ga', (options = {}) ->
   eventCategory = options.eventCategory || dataSetupOptions.eventCategory || 'Brightcove Player'
   # if you didn't specify a name, it will be 'guessed' from the video src after metadatas are loaded
   defaultLabel = options.eventLabel || dataSetupOptions.eventLabel
-  
+
   #override the send beacon method - in our case, we need to do data layer pushes
   sendbeaconOverride = options.sendbeaconOverride || false
-	
+
   # init a few variables
   percentsAlreadyTracked = []
   startTracked = false
@@ -220,7 +223,7 @@ videojs.plugin 'ga', (options = {}) ->
     else
       href = window.location.href
       iframe = 0
-      
+
 		if sendbeaconOverride
       sendbeaconOverride(eventCategory, getEventName('player_load'), href, iframe, true)
     else if window.ga
